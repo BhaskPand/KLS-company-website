@@ -1,70 +1,217 @@
-# Getting Started with Create React App
+# KLS Tech Solution - Smart Home Automation Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, responsive website for KLS Tech Solution featuring smart home automation solutions, built with React, Tailwind CSS, GSAP animations, and Spline 3D.
 
-## Available Scripts
+## 🚀 Quick Start Guide
 
-In the project directory, you can run:
+### Prerequisites
+
+Before running this project, make sure you have the following installed on your system:
+
+- **Node.js** (version 14.0 or higher) - [Download here](https://nodejs.org/)
+- **npm** (comes with Node.js) or **yarn**
+
+To check if you have them installed, run:
+```bash
+node --version
+npm --version
+```
+
+### 📦 Installation Steps
+
+#### Step 1: Copy the Project Files
+
+Copy the entire `klsts` folder to your new system. You need these files and folders:
+```
+klsts/
+├── public/
+├── src/
+├── package.json
+├── package-lock.json
+├── tailwind.config.js
+├── postcss.config.js
+└── README.md
+```
+
+**Note:** You do NOT need to copy the `node_modules` folder - it will be installed automatically.
+
+#### Step 2: Navigate to Project Directory
+
+Open your terminal/command prompt and navigate to the project folder:
+
+```bash
+cd klsts
+```
+
+#### Step 3: Install Dependencies
+
+Install all required packages:
+
+```bash
+npm install
+```
+
+This will install all dependencies listed in `package.json`. This may take a few minutes.
+
+#### Step 4: Start the Development Server
+
+Run the development server:
+
+```bash
+npm start
+```
+
+The app will automatically open in your browser at [http://localhost:3000](http://localhost:3000)
+
+If it doesn't open automatically, manually navigate to `http://localhost:3000` in your browser.
+
+---
+
+## 📋 Available Scripts
 
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Runs the app in development mode. The page will reload automatically when you make changes.
 
 ### `npm run build`
+Builds the app for production. Creates an optimized `build` folder ready for deployment.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `npm test`
+Launches the test runner in interactive watch mode.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Technologies Used
 
-### `npm run eject`
+- **React** - UI library
+- **Tailwind CSS** - Styling framework
+- **GSAP** - Animation library
+- **ScrollTrigger** - Scroll-based animations
+- **Lenis** - Smooth scrolling
+- **Spline** - 3D interactive elements
+- **Lucide React** - Icon library
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 📁 Project Structure
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+klsts/
+├── public/              # Static files
+│   ├── index.html
+│   └── ...
+├── src/
+│   ├── App.js          # Main application component
+│   ├── App.css         # Custom styles
+│   ├── index.js        # Entry point
+│   ├── index.css       # Global styles with Tailwind
+│   └── ...
+├── package.json         # Dependencies and scripts
+├── tailwind.config.js   # Tailwind configuration
+├── postcss.config.js    # PostCSS configuration
+└── README.md           # This file
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 🔧 Troubleshooting
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Port Already in Use
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+If port 3000 is already in use, you'll see an error. You can either:
+1. Stop the other application using port 3000
+2. Use a different port by setting the PORT environment variable:
+   ```bash
+   PORT=3001 npm start
+   ```
 
-### Code Splitting
+### Module Not Found Errors
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+If you see "Module not found" errors:
+1. Delete the `node_modules` folder (if it exists)
+2. Delete `package-lock.json`
+3. Run `npm install` again
 
-### Analyzing the Bundle Size
+### Spline 3D Not Loading
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The Spline 3D scene might take a moment to load. If it doesn't appear:
+- Check your internet connection (Spline loads from external URL)
+- Check browser console for any errors
+- The site will still work without the 3D background
 
-### Making a Progressive Web App
+### Build Errors
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+If you encounter build errors:
+```bash
+# Clear npm cache
+npm cache clean --force
 
-### Advanced Configuration
+# Delete node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## 🌐 Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Building for Production
 
-### `npm run build` fails to minify
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This creates a `build` folder with optimized production files.
+
+### Deploy Options
+
+You can deploy the `build` folder to:
+- **Netlify** - Drag and drop the build folder
+- **Vercel** - Connect your GitHub repo
+- **GitHub Pages** - Use `gh-pages` package
+- **Any static hosting service**
+
+---
+
+## 📝 Environment Requirements
+
+- **Node.js**: 14.0.0 or higher
+- **npm**: 6.0.0 or higher (or yarn 1.22.0+)
+- **Browser**: Modern browser (Chrome, Firefox, Safari, Edge)
+
+---
+
+## 💡 Tips
+
+1. **First Time Setup**: The initial `npm install` may take 5-10 minutes depending on your internet speed.
+
+2. **Hot Reload**: The development server automatically reloads when you save changes to files.
+
+3. **Browser DevTools**: Open browser DevTools (F12) to see any console errors or warnings.
+
+4. **Git**: If using Git, make sure to add `node_modules/` to your `.gitignore` file.
+
+---
+
+## 📞 Support
+
+If you encounter any issues:
+1. Check that Node.js and npm are properly installed
+2. Ensure all dependencies are installed (`npm install`)
+3. Check the browser console for error messages
+4. Verify you're in the correct directory (`klsts`)
+
+---
+
+## ✅ Quick Checklist
+
+- [ ] Node.js installed (check with `node --version`)
+- [ ] npm installed (check with `npm --version`)
+- [ ] Project files copied to new system
+- [ ] Navigated to project directory (`cd klsts`)
+- [ ] Dependencies installed (`npm install`)
+- [ ] Development server started (`npm start`)
+- [ ] Browser opened to `http://localhost:3000`
+
+---
+
+**Happy Coding! 🎉**
