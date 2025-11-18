@@ -14,14 +14,18 @@ body {
 
 /* Header Scroll Effect */
 .header {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  border-bottom: 1px solid transparent;
 }
 
 .header.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.4);
 }
 
 /* Smooth Scrolling */
@@ -86,34 +90,13 @@ html {
   transform: scale(1.1) rotate(5deg);
 }
 
-/* MetaSpaces Cards */
-.metaspace-card {
-  scroll-snap-align: start;
+/* Service Cards */
+.service-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.metaspaces-container {
-  scroll-snap-type: x mandatory;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Hide scrollbar for MetaSpaces container */
-.metaspaces-container::-webkit-scrollbar {
-  display: none;
-}
-
-.metaspaces-container {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Comparison Table */
-.comparison-row {
-  transition: background-color 0.3s ease;
-}
-
-.comparison-row:hover {
-  background-color: rgba(0, 0, 0, 0.02);
+.service-card:hover {
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.08);
 }
 
 /* Sign Up Modal Animation */

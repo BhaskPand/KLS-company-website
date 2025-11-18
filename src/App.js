@@ -3,7 +3,17 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Spline from '@splinetool/react-spline';
 import Lenis from 'lenis';
-import { Menu, X, ArrowRight, ExternalLink, MessageCircle, Twitter, Youtube } from 'lucide-react';
+import {
+  Menu,
+  X,
+  MessageCircle,
+  Twitter,
+  Youtube,
+  Phone,
+  Mail,
+  MapPin,
+  CheckCircle,
+} from 'lucide-react';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,12 +21,12 @@ gsap.registerPlugin(ScrollTrigger);
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
-  const [selectedWorlds, setSelectedWorlds] = useState(['decentraland', 'sandbox']);
   const heroRef = useRef(null);
   const titleRef = useRef(null);
-  const featuredRef = useRef(null);
-  const comparisonRef = useRef(null);
-  const metaSpacesRef = useRef(null);
+  const servicesRef = useRef(null);
+  const productsRef = useRef(null);
+  const aboutRef = useRef(null);
+  const contactRef = useRef(null);
   const footerRef = useRef(null);
 
   // Smooth scroll with Lenis
@@ -55,8 +65,6 @@ function App() {
   // Header scroll effect
   useEffect(() => {
     const header = document.querySelector('.header');
-    let lastScroll = 0;
-
     const handleScroll = () => {
       const currentScroll = window.scrollY;
       if (currentScroll > 50) {
@@ -64,7 +72,6 @@ function App() {
       } else {
         header?.classList.remove('scrolled');
       }
-      lastScroll = currentScroll;
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -101,140 +108,163 @@ function App() {
     }
   }, []);
 
-  // Featured Worlds animations
+  // Services reveal
   useEffect(() => {
-    if (!featuredRef.current) return;
+    const servicesSection = servicesRef.current;
+    if (!servicesSection) return;
 
-    const cards = featuredRef.current.querySelectorAll('.world-card');
-    if (cards.length > 0) {
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: 60 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: featuredRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
+    const cards = servicesSection.querySelectorAll('.service-card');
+    if (cards.length === 0) return;
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: servicesSection,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === servicesSection || (trigger.vars && trigger.vars.trigger === servicesSection)) {
+          trigger.kill();
         }
-      );
-    }
+      });
+    };
+  }, []);
 
-    const heading = featuredRef.current.querySelector('.section-heading');
-    if (heading) {
-      gsap.fromTo(
-        heading,
-        { opacity: 0, y: 30 },
+  // Global section reveal
+  useEffect(() => {
+    const sections = document.querySelectorAll('[data-scroll-reveal]');
+    const triggers = [];
+
+    sections.forEach(section => {
+      const tween = gsap.fromTo(
+        section,
+        { opacity: 0, y: 50 },
         {
           opacity: 1,
           y: 0,
           duration: 1,
           ease: 'power3.out',
           scrollTrigger: {
-            trigger: featuredRef.current,
+            trigger: section,
             start: 'top 85%',
             toggleActions: 'play none none none',
           },
         }
       );
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === featuredRef.current || (trigger.vars && trigger.vars.trigger === featuredRef.current)) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
-
-  // Comparison animations
-  useEffect(() => {
-    if (!comparisonRef.current) return;
-
-    const rows = comparisonRef.current.querySelectorAll('.comparison-row');
-    if (rows.length > 0) {
-      gsap.fromTo(
-        rows,
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: comparisonRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === comparisonRef.current || (trigger.vars && trigger.vars.trigger === comparisonRef.current)) {
-          trigger.kill();
-        }
-      });
-    };
-  }, []);
-
-  // MetaSpaces horizontal scroll
-  useEffect(() => {
-    if (!metaSpacesRef.current) return;
-
-    const container = metaSpacesRef.current.querySelector('.metaspaces-container');
-    if (!container) return;
-
-    const cards = container.querySelectorAll('.metaspace-card');
-    
-    const scrollWidth = container.scrollWidth - window.innerWidth;
-    
-    if (scrollWidth > 0) {
-      const scrollTrigger = gsap.to(container, {
-        x: -scrollWidth,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: metaSpacesRef.current,
-          start: 'top top',
-          end: () => `+=${scrollWidth}`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // Card fade-in animations
-      if (cards.length > 0) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, scale: 0.9 },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: metaSpacesRef.current,
-              start: 'top 50%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
+      if (tween.scrollTrigger) {
+        triggers.push(tween.scrollTrigger);
       }
-    }
+    });
+
+    return () => {
+      triggers.forEach(trigger => trigger.kill());
+    };
+  }, []);
+
+  // Products reveal
+  useEffect(() => {
+    const productsSection = productsRef.current;
+    if (!productsSection) return;
+
+    const cards = productsSection.querySelectorAll('.product-card');
+    if (cards.length === 0) return;
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: productsSection,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
 
     return () => {
       ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === metaSpacesRef.current || (trigger.vars && trigger.vars.trigger === metaSpacesRef.current)) {
+        if (trigger.trigger === productsSection || (trigger.vars && trigger.vars.trigger === productsSection)) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
+
+  // About reveal
+  useEffect(() => {
+    const aboutSection = aboutRef.current;
+    if (!aboutSection) return;
+
+    const cards = aboutSection.querySelectorAll('.stat-card, .graph-card');
+    if (cards.length === 0) return;
+
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: aboutSection,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === aboutSection || (trigger.vars && trigger.vars.trigger === aboutSection)) {
+          trigger.kill();
+        }
+      });
+    };
+  }, []);
+
+  // Contact reveal
+  useEffect(() => {
+    const contactSection = contactRef.current;
+    if (!contactSection) return;
+
+    gsap.fromTo(
+      contactSection,
+      { opacity: 0, y: 60 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: contactSection,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.trigger === contactSection || (trigger.vars && trigger.vars.trigger === contactSection)) {
           trigger.kill();
         }
       });
@@ -243,10 +273,11 @@ function App() {
 
   // Footer animation
   useEffect(() => {
-    if (!footerRef.current) return;
+    const footerSection = footerRef.current;
+    if (!footerSection) return;
 
     gsap.fromTo(
-      footerRef.current,
+      footerSection,
       { opacity: 0, y: 40 },
       {
         opacity: 1,
@@ -254,7 +285,7 @@ function App() {
         duration: 1,
         ease: 'power3.out',
         scrollTrigger: {
-          trigger: footerRef.current,
+          trigger: footerSection,
           start: 'top 90%',
           toggleActions: 'play none none none',
         },
@@ -263,152 +294,104 @@ function App() {
 
     return () => {
       ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === footerRef.current || (trigger.vars && trigger.vars.trigger === footerRef.current)) {
+        if (trigger.trigger === footerSection || (trigger.vars && trigger.vars.trigger === footerSection)) {
           trigger.kill();
         }
       });
     };
   }, []);
 
-  const worlds = [
+  const products = [
     {
-      id: 'decentraland',
-      name: 'Decentraland',
-      description: 'A virtual world where you can build, explore, and monetize your creations.',
-      logo: 'https://via.placeholder.com/80',
-      activeUsers: '8,000+',
-      avgLandPrice: '1,200 MANA',
-      token: 'MANA',
+      id: 'aurora',
+      name: 'Aurora Control Hub',
+      description:
+        'An edge-compute automation brain that harmonizes lighting, climate, AV, and security into one adaptive scene.',
+      highlights: ['Self-healing mesh network', 'Zero-latency command routing', 'AI-assisted routine learning'],
     },
     {
-      id: 'sandbox',
-      name: 'The Sandbox',
-      description: 'A community-driven gaming platform where creators can monetize voxel assets.',
-      logo: 'https://via.placeholder.com/80',
-      activeUsers: '12,000+',
-      avgLandPrice: '2,500 SAND',
-      token: 'SAND',
+      id: 'sentinel',
+      name: 'Sentinel Vision Suite',
+      description:
+        'Computer-vision powered safeguards that recognize patterns, predict anomalies, and alert our concierge desk instantly.',
+      highlights: ['Privacy-first edge analytics', 'Smart perimeter zoning', '24/7 remote stewardship'],
     },
     {
-      id: 'otherside',
-      name: 'Otherside',
-      description: 'Yuga Labs metaverse combining storytelling, gaming, and social experiences.',
-      logo: 'https://via.placeholder.com/80',
-      activeUsers: '5,000+',
-      avgLandPrice: '3,500 APE',
-      token: 'APE',
-    },
-    {
-      id: 'somnium',
-      name: 'Somnium Space',
-      description: 'An open, social virtual reality world built on the blockchain.',
-      logo: 'https://via.placeholder.com/80',
-      activeUsers: '3,000+',
-      avgLandPrice: '1,800 CUBE',
-      token: 'CUBE',
-    },
-    {
-      id: 'voxels',
-      name: 'Voxels',
-      description: 'A virtual world and metaverse powered by the Ethereum blockchain.',
-      logo: 'https://via.placeholder.com/80',
-      activeUsers: '4,000+',
-      avgLandPrice: '900 ETH',
-      token: 'ETH',
-    },
-    {
-      id: 'cryptovoxels',
-      name: 'Cryptovoxels',
-      description: 'A virtual world, a metaverse, running entirely on the Ethereum blockchain.',
-      logo: 'https://via.placeholder.com/80',
-      activeUsers: '2,500+',
-      avgLandPrice: '1,100 ETH',
-      token: 'ETH',
+      id: 'pulse',
+      name: 'Pulse Energy Canvas',
+      description:
+        'A live energy storyboard that balances solar, EV, and grid input to keep your residence efficient and resilient.',
+      highlights: ['Carbon-aware automations', 'Microgrid readiness', 'Predictive maintenance cues'],
     },
   ];
 
-  const comparisonData = {
-    decentraland: {
-      token: 'MANA',
-      tokenPrice: '$0.45',
-      avgLandPrice: '1,200 MANA',
-      activeUsers: '8,000+',
-      vrSupport: 'Yes',
-      marketplace: 'https://market.decentraland.org',
-    },
-    sandbox: {
-      token: 'SAND',
-      tokenPrice: '$0.38',
-      avgLandPrice: '2,500 SAND',
-      activeUsers: '12,000+',
-      vrSupport: 'Partial',
-      marketplace: 'https://www.sandbox.game/marketplace',
-    },
-    otherside: {
-      token: 'APE',
-      tokenPrice: '$1.25',
-      avgLandPrice: '3,500 APE',
-      activeUsers: '5,000+',
-      vrSupport: 'Yes',
-      marketplace: 'https://otherside.xyz',
-    },
-    somnium: {
-      token: 'CUBE',
-      tokenPrice: '$0.12',
-      avgLandPrice: '1,800 CUBE',
-      activeUsers: '3,000+',
-      vrSupport: 'Yes',
-      marketplace: 'https://somniumspace.com',
-    },
-  };
-
-  const metaSpaces = [
+  const services = [
     {
-      id: 1,
-      title: 'Concert Hall',
-      world: 'Decentraland',
-      category: 'Entertainment',
-      image: 'https://via.placeholder.com/600x400',
-      description: 'Experience live concerts and music events in a stunning virtual venue with immersive audio.',
-      link: 'https://decentraland.org',
+      title: 'Smart Home Strategy',
+      description: 'We map every room, appliance, and routine to design an automation blueprint that feels effortless from day one.',
+      benefits: ['Energy-aware device planning', 'Security-first architecture', 'Future-ready network design'],
     },
     {
-      id: 2,
-      title: 'NFT Gallery',
-      world: 'The Sandbox',
-      category: 'Art & Culture',
-      image: 'https://via.placeholder.com/600x400',
-      description: 'Explore curated collections of digital art and NFTs in this beautifully designed gallery space.',
-      link: 'https://sandbox.game',
+      title: 'AI Experience Design',
+      description: 'Custom voice and gesture journeys that surface the right scene, playlist, or workflow before you even ask.',
+      benefits: ['Adaptive routines', 'Contextual voice scenes', 'Privacy-safe personalization'],
     },
     {
-      id: 3,
-      title: 'Brand Experience',
-      world: 'Otherside',
-      category: 'Commerce',
-      image: 'https://via.placeholder.com/600x400',
-      description: 'Interactive brand showcases and virtual shopping experiences in a premium metaverse location.',
-      link: 'https://otherside.xyz',
+      title: '24/7 Concierge Monitoring',
+      description: 'A dedicated command center that keeps an eye on your ecosystem, resolves alerts, and ships updates while you sleep.',
+      benefits: ['Real-time diagnostics', 'Remote firmware care', 'White-glove on-site visits'],
     },
     {
-      id: 4,
-      title: 'Gaming Arena',
-      world: 'Somnium Space',
-      category: 'Gaming',
-      image: 'https://via.placeholder.com/600x400',
-      description: 'Competitive gaming tournaments and esports events in a state-of-the-art virtual arena.',
-      link: 'https://somniumspace.com',
-    },
-    {
-      id: 5,
-      title: 'Virtual Office',
-      world: 'Decentraland',
-      category: 'Business',
-      image: 'https://via.placeholder.com/600x400',
-      description: 'Professional workspace for remote teams with collaboration tools and meeting rooms.',
-      link: 'https://decentraland.org',
+      title: 'Integration Lab',
+      description: 'From legacy lighting to the newest EV chargers, we make every gadget speak the same language using our in-house lab.',
+      benefits: ['Hardware retrofits', 'API orchestration', 'Compliance & safety checks'],
     },
   ];
+
+  const companyHighlights = [
+    { label: 'Projects orchestrated', value: '480+', detail: 'Across villas, penthouses, and boutique offices.' },
+    { label: 'Client satisfaction', value: '97%', detail: 'Measured via quarterly concierge interviews.' },
+    { label: 'Average response', value: '< 12 min', detail: 'Concierge desk coverage around the clock.' },
+  ];
+
+  const performanceGraphs = [
+    { label: 'Automation uptime', value: 99.3, description: 'Redundant nodes keep homes responsive.' },
+    { label: 'Energy savings', value: 32, description: 'Median reduction achieved in the first 90 days.' },
+    { label: 'Support resolution', value: 94, description: 'Tickets closed on the first touch.' },
+  ];
+
+  const contactDetails = [
+    { icon: <MapPin size={20} />, label: 'Visit Us', value: 'Bangalore, Karnataka, India' },
+    { icon: <Phone size={20} />, label: 'Call', value: '+91 9538123056/+91 8147910384 (24/7 concierge)' },
+    { icon: <Mail size={20} />, label: 'Email', value: 'bhaskarpanditmn@gmail.com / revanthw24@gmail.com ' },
+  ];
+
+  const LogoMark = () => (
+    <svg viewBox="0 0 120 120" className="w-12 h-12" role="img" aria-label="KLS Solutions Logo">
+      <defs>
+        <linearGradient id="kls-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#0f4c81" />
+          <stop offset="100%" stopColor="#6fd0ff" />
+        </linearGradient>
+        <linearGradient id="kls-silver" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#cfd5dd" />
+          <stop offset="100%" stopColor="#7f858f" />
+        </linearGradient>
+        <linearGradient id="kls-green" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#86d73f" />
+          <stop offset="100%" stopColor="#4fb248" />
+        </linearGradient>
+      </defs>
+      <rect width="120" height="120" rx="26" fill="#0b1c39" />
+      <path d="M22 25 L44 25 L65 54 L44 95 L22 95 L45 60 Z" fill="url(#kls-blue)" />
+      <path d="M70 25 H93 V95 H70 Z" fill="url(#kls-silver)" />
+      <path
+        d="M94 25 C111 25 115 37 100 44 C116 48 117 63 101 71 C116 78 110 95 94 95 H73 V78 H92 C98 78 100 73 96 70 L83 62 L96 55 C100 52 98 47 92 47 H73 V25 Z"
+        fill="url(#kls-blue)"
+      />
+      <path d="M74 62 H92 L84 66 Z" fill="url(#kls-green)" />
+    </svg>
+  );
 
   return (
     <div className="App bg-white text-black min-h-screen">
@@ -417,29 +400,30 @@ function App() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">K</span>
+            <div className="flex items-center space-x-3">
+              <LogoMark />
+              <div className="flex flex-col leading-tight">
+                <span className="text-2xl font-bold text-black">KLS Solutions</span>
+                <span className="text-xs tracking-[0.4em] uppercase text-gray-500">Tech</span>
               </div>
-              <span className="text-2xl font-bold text-black">KLS Tech Solution</span>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#explore" className="nav-link text-black hover:text-gray-700 transition-colors">
-                Explore
+              <a href="#home" className="nav-link text-black hover:text-gray-700 transition-colors">
+                Home
               </a>
-              <a href="#compare" className="nav-link text-black hover:text-gray-700 transition-colors">
-                Compare
+              <a href="#services" className="nav-link text-black hover:text-gray-700 transition-colors">
+                Services
               </a>
-              <a href="#metaspaces" className="nav-link text-black hover:text-gray-700 transition-colors">
-                MetaSpaces
+              <a href="#products" className="nav-link text-black hover:text-gray-700 transition-colors">
+                Our Products
               </a>
-              <a href="#events" className="nav-link text-black hover:text-gray-700 transition-colors">
-                MetaEvents
+              <a href="#about" className="nav-link text-black hover:text-gray-700 transition-colors">
+                About
               </a>
-              <a href="#blog" className="nav-link text-black hover:text-gray-700 transition-colors">
-                Blog
+              <a href="#contact" className="nav-link text-black hover:text-gray-700 transition-colors">
+                Contact
               </a>
             </nav>
 
@@ -470,20 +454,20 @@ function App() {
           }`}
         >
           <nav className="container mx-auto px-4 py-6 space-y-4">
-            <a href="#explore" className="block text-black hover:text-gray-700 py-2">
-              Explore
+            <a href="#home" className="block text-black hover:text-gray-700 py-2">
+              Home
             </a>
-            <a href="#compare" className="block text-black hover:text-gray-700 py-2">
-              Compare
+            <a href="#services" className="block text-black hover:text-gray-700 py-2">
+              Services
             </a>
-            <a href="#metaspaces" className="block text-black hover:text-gray-700 py-2">
-              MetaSpaces
+            <a href="#products" className="block text-black hover:text-gray-700 py-2">
+              Our Products
             </a>
-            <a href="#events" className="block text-black hover:text-gray-700 py-2">
-              MetaEvents
+            <a href="#about" className="block text-black hover:text-gray-700 py-2">
+              About
             </a>
-            <a href="#blog" className="block text-black hover:text-gray-700 py-2">
-              Blog
+            <a href="#contact" className="block text-black hover:text-gray-700 py-2">
+              Contact
             </a>
             <button 
               onClick={() => {
@@ -499,7 +483,7 @@ function App() {
       </header>
 
       {/* Hero Section */}
-      <section ref={heroRef} className="hero-section relative w-full h-screen overflow-hidden">
+      <section id="home" ref={heroRef} data-scroll-reveal className="hero-section relative w-full h-screen overflow-hidden">
         <div className="spline-container absolute inset-0 w-full h-full">
           <Spline 
             scene="https://prod.spline.design/z3D2bm3gZeZBwdke/scene.splinecode"
@@ -518,220 +502,266 @@ function App() {
         </div>
       </section>
 
-      {/* Featured Worlds Section */}
+      {/* Services Section */}
       <section
-        id="explore"
-        ref={featuredRef}
-        className="featured-worlds py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8"
+        id="services"
+        ref={servicesRef}
+        data-scroll-reveal
+        className="services-section py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50"
       >
         <div className="container mx-auto">
-          <h2 className="section-heading text-4xl sm:text-5xl font-bold text-black text-center mb-4 sm:mb-6">
-            Featured Worlds
-          </h2>
-          <p className="text-center text-gray-700 mb-12 sm:mb-16 max-w-2xl mx-auto">
-            Discover the most popular and innovative metaverse platforms
-          </p>
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-black mb-4">Services</h2>
+            <p className="text-gray-700 text-lg leading-relaxed">
+              We build living spaces that anticipate you. From discovery workshops to concierge monitoring,
+              every service is stitched together with obsessive attention to detail.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {worlds.map((world) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+            {services.map((service) => (
               <div
-                key={world.id}
-                className="world-card bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-gray-400 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                key={service.title}
+                className="service-card bg-white border-2 border-gray-200 rounded-2xl p-8 hover:border-gray-400 hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="flex items-center space-x-4 mb-4">
-                  <img
-                    src={world.logo}
-                    alt={world.name}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
-                  <div>
-                    <h3 className="text-xl font-bold text-black">{world.name}</h3>
-                    <p className="text-sm text-gray-600">{world.token}</p>
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-black text-white flex items-center justify-center">
+                    <CheckCircle size={24} />
                   </div>
+                  <h3 className="text-2xl font-bold text-black">{service.title}</h3>
                 </div>
-                <p className="text-gray-700 mb-4 text-sm leading-relaxed">{world.description}</p>
-                <div className="space-y-2 mb-6 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Active Users:</span>
-                    <span className="text-black font-medium">{world.activeUsers}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Avg Land Price:</span>
-                    <span className="text-black font-medium">{world.avgLandPrice}</span>
-                  </div>
-                </div>
-                <button className="w-full py-2.5 border-2 border-black text-black rounded-lg hover:bg-black hover:text-white transition-all duration-300 font-medium">
-                  View Details
-                </button>
+                <p className="text-gray-700 mb-6 leading-relaxed">{service.description}</p>
+                <ul className="space-y-3">
+                  {service.benefits.map((benefit) => (
+                    <li key={benefit} className="flex items-start space-x-2 text-gray-800">
+                      <span className="mt-1 w-2 h-2 rounded-full bg-black" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* World Comparison Tool */}
+      {/* Products Section */}
       <section
-        id="compare"
-        ref={comparisonRef}
-        className="comparison-section py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50"
+        id="products"
+        ref={productsRef}
+        data-scroll-reveal
+        className="products-section py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8"
       >
         <div className="container mx-auto">
-          <h2 className="text-4xl sm:text-5xl font-bold text-black text-center mb-4 sm:mb-6">
-            Compare Worlds
-          </h2>
-          <p className="text-center text-gray-700 mb-12 sm:mb-16 max-w-2xl mx-auto">
-            Select up to 3 metaverse worlds to compare their features and stats
-          </p>
-
-          <div className="flex flex-wrap gap-4 mb-8 justify-center">
-            {[0, 1, 2].map((index) => (
-              <select
-                key={index}
-                value={selectedWorlds[index] || ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  const newSelected = [...selectedWorlds];
-                  if (value) {
-                    newSelected[index] = value;
-                  } else {
-                    newSelected.splice(index, 1);
-                  }
-                  setSelectedWorlds(newSelected.filter(Boolean));
-                }}
-                className="px-4 py-2 border-2 border-gray-300 rounded-lg bg-white text-black focus:outline-none focus:border-black min-w-[200px]"
-              >
-                <option value="">Select World {index + 1}</option>
-                {worlds
-                  .filter((w) => !selectedWorlds.includes(w.id) || selectedWorlds[index] === w.id)
-                  .map((w) => (
-                    <option key={w.id} value={w.id}>
-                      {w.name}
-                    </option>
-                  ))}
-              </select>
-            ))}
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <p className="text-sm uppercase tracking-[0.3em] text-gray-500 mb-3">Our Products</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-black mb-4">Intelligent systems built in-house</h2>
+            <p className="text-gray-700 text-lg leading-relaxed">
+              Every product is engineered inside the KLS Integration Lab so your residence gets future-ready tech that is
+              obsessively tested and concierge-supported.
+            </p>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full bg-white border-2 border-gray-200 rounded-xl overflow-hidden">
-              <thead>
-                <tr className="bg-black text-white">
-                  <th className="px-4 py-4 text-left font-bold">World</th>
-                  <th className="px-4 py-4 text-left font-bold">Token & Price</th>
-                  <th className="px-4 py-4 text-left font-bold">Avg Land Price</th>
-                  <th className="px-4 py-4 text-left font-bold">Active Users</th>
-                  <th className="px-4 py-4 text-left font-bold">VR Support</th>
-                  <th className="px-4 py-4 text-left font-bold">Marketplace</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedWorlds.map((worldId, index) => {
-                  const world = worlds.find((w) => w.id === worldId);
-                  const data = comparisonData[worldId];
-                  if (!world || !data) return null;
-
-                  const isBest = index === 0; // First selected is "best choice"
-
-                  return (
-                    <tr
-                      key={worldId}
-                      className={`comparison-row border-t border-gray-200 ${
-                        isBest ? 'bg-gray-100 font-bold' : ''
-                      }`}
-                    >
-                      <td className="px-4 py-4">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-black font-medium">{world.name}</span>
-                          {isBest && (
-                            <span className="text-xs bg-black text-white px-2 py-1 rounded">
-                              Best Choice
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-black">
-                        {data.token} ({data.tokenPrice})
-                      </td>
-                      <td className="px-4 py-4 text-black">{data.avgLandPrice}</td>
-                      <td className="px-4 py-4 text-black">{data.activeUsers}</td>
-                      <td className="px-4 py-4 text-black">{data.vrSupport}</td>
-                      <td className="px-4 py-4">
-                        <a
-                          href={data.marketplace}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-black hover:text-gray-700 flex items-center space-x-1"
-                        >
-                          <span>Visit</span>
-                          <ExternalLink size={14} />
-                        </a>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="product-card h-full bg-white border-2 border-gray-200 rounded-2xl p-8 hover:border-gray-400 hover:-translate-y-1 transition-all duration-300 flex flex-col"
+              >
+                <div className="mb-4">
+                  <span className="text-xs font-semibold tracking-[0.4em] uppercase text-gray-500">KLS</span>
+                  <h3 className="text-2xl font-bold text-black mt-2">{product.name}</h3>
+                </div>
+                <p className="text-gray-700 mb-6 leading-relaxed flex-1">{product.description}</p>
+                <ul className="space-y-3 text-gray-800 text-sm">
+                  {product.highlights.map((point) => (
+                    <li key={point} className="flex items-start space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-black mt-1" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* MetaSpaces Section */}
+      {/* About Section */}
       <section
-        id="metaspaces"
-        ref={metaSpacesRef}
-        className="metaspaces-section py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8"
+        id="about"
+        ref={aboutRef}
+        data-scroll-reveal
+        className="about-section py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gray-50"
       >
-        <div className="container mx-auto mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold text-black text-center mb-4 sm:mb-6">
-            MetaSpaces
-          </h2>
-          <p className="text-center text-gray-700 mb-8 max-w-2xl mx-auto">
-            Explore immersive spaces and experiences across the metaverse
-          </p>
-        </div>
+        <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-gray-500 mb-3">About Us</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+              We craft homes that feel choreographed, not automated.
+            </h2>
+            <p className="text-gray-700 text-lg leading-relaxed mb-6">
+              KLS Tech Solutions began as a small crew of systems architects who believed that technology should feel
+              poetic. Today, our ateliers in Bangalore and Dubai fine-tune lighting, acoustics, security, and energy so
+              every routine feels curated. We partner with architects, hoteliers, and visionary homeowners to turn daily
+              rituals into immersive experiences.
+            </p>
+            <p className="text-gray-700 text-lg leading-relaxed">
+              From blueprint to lifetime concierge care, we stay beside you with proactive monitoring, hands-on
+              interventions, and a culture of transparent craftsmanship.
+            </p>
 
-        <div className="metaspaces-container flex space-x-6 sm:space-x-8 px-4 sm:px-6 lg:px-8">
-          {metaSpaces.map((space) => (
-            <div
-              key={space.id}
-              className="metaspace-card flex-shrink-0 w-80 sm:w-96 lg:w-[500px] group"
-            >
-              <div className="relative overflow-hidden rounded-xl border-2 border-gray-200 hover:border-gray-400 transition-all duration-300">
-                <div className="relative h-64 sm:h-80 overflow-hidden">
-                  <img
-                    src={space.image}
-                    alt={space.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <div className="text-xs text-gray-300 mb-1">
-                      {space.world} • {space.category}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+              {companyHighlights.map((item) => (
+                <div key={item.label} className="stat-card bg-white border-2 border-gray-200 rounded-2xl p-4 text-center">
+                  <p className="text-sm uppercase tracking-widest text-gray-500">{item.label}</p>
+                  <p className="text-2xl font-bold text-black my-2">{item.value}</p>
+                  <p className="text-xs text-gray-600">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white border-2 border-gray-200 rounded-3xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-black mb-6">Performance at a glance</h3>
+            <div className="space-y-6">
+              {performanceGraphs.map((metric) => (
+                <div key={metric.label} className="graph-card">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">{metric.label}</p>
+                    <span className="text-xl font-bold text-black">{metric.value}%</span>
+                  </div>
+                    <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-blue-500 to-green-400 rounded-full"
+                        style={{ width: `${Math.min(metric.value, 100)}%` }}
+                      />
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-bold">{space.title}</h3>
+                  <p className="text-xs text-gray-600 mt-2">{metric.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section
+        id="contact"
+        ref={contactRef}
+        data-scroll-reveal
+        className="contact-section py-20 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8"
+      >
+        <div className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <p className="text-sm uppercase tracking-[0.3em] text-gray-500 mb-4">Contact</p>
+            <h2 className="text-4xl sm:text-5xl font-bold text-black mb-6">
+              Tell us how your ideal day at home should feel.
+            </h2>
+            <p className="text-gray-700 mb-8 leading-relaxed">
+              Our architects respond within one business day with a curated playbook—no aggressive sales,
+              just thoughtful ideas tailored to your routines, family, and goals.
+            </p>
+
+            <div className="space-y-5">
+              {contactDetails.map((detail) => (
+                <div key={detail.label} className="flex items-start space-x-4">
+                  <div className="w-12 h-12 rounded-xl border-2 border-gray-200 flex items-center justify-center text-black">
+                    {detail.icon}
+                  </div>
+                  <div>
+                    <p className="text-sm uppercase tracking-widest text-gray-500">{detail.label}</p>
+                    <p className="text-lg font-medium text-black">{detail.value}</p>
                   </div>
                 </div>
-                <div className="p-6 bg-white">
-                  <p className="text-gray-700 mb-4 text-sm leading-relaxed">{space.description}</p>
-                  <a
-                    href={space.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 text-black border-2 border-black px-6 py-2.5 rounded-lg hover:bg-black hover:text-white transition-all duration-300 font-medium"
-                  >
-                    <span>Teleport</span>
-                    <ArrowRight size={18} />
-                  </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-white border-2 border-gray-200 rounded-3xl p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-black mb-4">Share your project</h3>
+            <p className="text-gray-600 mb-6 text-sm">
+              Tell us about timelines, priorities, or the smart features you have in mind. We will craft a custom response.
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+                console.log('Contact form submission:', data);
+                alert('Thanks for reaching out! Our team will contact you shortly.');
+                e.target.reset();
+              }}
+              className="space-y-5"
+            >
+              <div>
+                <label htmlFor="project-name" className="block text-sm font-medium text-black mb-2">
+                  Full Name
+                </label>
+                <input
+                  id="project-name"
+                  name="name"
+                  required
+                  className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-500"
+                  placeholder="Ananya Kapoor"
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="project-email" className="block text-sm font-medium text-black mb-2">
+                    Email
+                  </label>
+                  <input
+                    id="project-email"
+                    type="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-500"
+                    placeholder="you@example.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="project-phone" className="block text-sm font-medium text-black mb-2">
+                    Phone
+                  </label>
+                  <input
+                    id="project-phone"
+                    type="tel"
+                    name="phone"
+                    required
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-500"
+                    placeholder="+91 90000 00000"
+                  />
                 </div>
               </div>
-            </div>
-          ))}
+              <div>
+                <label htmlFor="project-notes" className="block text-sm font-medium text-black mb-2">
+                  What would you like us to build?
+                </label>
+                <textarea
+                  id="project-notes"
+                  name="message"
+                  rows={4}
+                  required
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-black text-black placeholder-gray-500"
+                  placeholder="Describe your current home setup, wishlist, or any inspiration references."
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-300 font-medium text-lg"
+              >
+                Submit Request
+              </button>
+            </form>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer
         ref={footerRef}
+        data-scroll-reveal
         className="footer bg-white border-t-2 border-gray-200 py-12 sm:py-16 px-4 sm:px-6 lg:px-8"
       >
         <div className="container mx-auto">
@@ -741,18 +771,23 @@ function App() {
               <h3 className="text-lg font-bold text-black mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#explore" className="text-gray-700 hover:text-black transition-colors">
+                  <a href="#home" className="text-gray-700 hover:text-black transition-colors">
                     Home
                   </a>
                 </li>
                 <li>
-                  <a href="#compare" className="text-gray-700 hover:text-black transition-colors">
-                    Compare
+                  <a href="#services" className="text-gray-700 hover:text-black transition-colors">
+                    Services
                   </a>
                 </li>
                 <li>
-                  <a href="#blog" className="text-gray-700 hover:text-black transition-colors">
-                    Blog
+                  <a href="#products" className="text-gray-700 hover:text-black transition-colors">
+                    Our Products
+                  </a>
+                </li>
+                <li>
+                  <a href="#about" className="text-gray-700 hover:text-black transition-colors">
+                    About
                   </a>
                 </li>
                 <li>
@@ -768,19 +803,25 @@ function App() {
               <h3 className="text-lg font-bold text-black mb-4">Follow Us</h3>
               <div className="flex space-x-4">
                 <a
-                  href="#"
+                  href="https://wa.me/+91-9538123056/+91-8147910384"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon w-10 h-10 border-2 border-black rounded-lg flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300"
                 >
                   <MessageCircle size={20} />
                 </a>
                 <a
-                  href="#"
+                  href="https://twitter.com/KLSTechHQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon w-10 h-10 border-2 border-black rounded-lg flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300"
                 >
                   <Twitter size={20} />
                 </a>
                 <a
-                  href="#"
+                  href="https://youtube.com/@klstechsolutions"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-icon w-10 h-10 border-2 border-black rounded-lg flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300"
                 >
                   <Youtube size={20} />
@@ -792,7 +833,7 @@ function App() {
             <div className="lg:col-span-2">
               <h3 className="text-lg font-bold text-black mb-4">Newsletter</h3>
               <p className="text-gray-700 mb-4 text-sm">
-                Stay updated with the latest metaverse news and updates
+                Stay updated with the latest KLS Technews and updates
               </p>
               <form className="flex flex-col sm:flex-row gap-2">
                 <input
@@ -917,7 +958,7 @@ function App() {
                   className="w-4 h-4 border-2 border-gray-300 rounded focus:ring-black focus:ring-2"
                 />
                 <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
-                  I agree to the <a href="#" className="text-black underline">Terms of Service</a> and <a href="#" className="text-black underline">Privacy Policy</a>
+                  I agree to the <a href="/terms" className="text-black underline">Terms of Service</a> and <a href="/privacy" className="text-black underline">Privacy Policy</a>
                 </label>
               </div>
 
