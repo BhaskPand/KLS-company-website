@@ -367,30 +367,11 @@ function App() {
   ];
 
   const LogoMark = () => (
-    <svg viewBox="0 0 120 120" className="w-12 h-12" role="img" aria-label="KLS Solutions Logo">
-      <defs>
-        <linearGradient id="kls-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0f4c81" />
-          <stop offset="100%" stopColor="#6fd0ff" />
-        </linearGradient>
-        <linearGradient id="kls-silver" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#cfd5dd" />
-          <stop offset="100%" stopColor="#7f858f" />
-        </linearGradient>
-        <linearGradient id="kls-green" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#86d73f" />
-          <stop offset="100%" stopColor="#4fb248" />
-        </linearGradient>
-      </defs>
-      <rect width="120" height="120" rx="26" fill="#0b1c39" />
-      <path d="M22 25 L44 25 L65 54 L44 95 L22 95 L45 60 Z" fill="url(#kls-blue)" />
-      <path d="M70 25 H93 V95 H70 Z" fill="url(#kls-silver)" />
-      <path
-        d="M94 25 C111 25 115 37 100 44 C116 48 117 63 101 71 C116 78 110 95 94 95 H73 V78 H92 C98 78 100 73 96 70 L83 62 L96 55 C100 52 98 47 92 47 H73 V25 Z"
-        fill="url(#kls-blue)"
-      />
-      <path d="M74 62 H92 L84 66 Z" fill="url(#kls-green)" />
-    </svg>
+    <img 
+      src="/kls-logo.png" 
+      alt="KLS Solutions Logo" 
+      className="h-12 w-auto"
+    />
   );
 
   return (
