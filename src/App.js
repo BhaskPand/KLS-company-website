@@ -7,7 +7,7 @@ import {
   Menu,
   X,
   MessageCircle,
-  Twitter,
+  Linkedin,
   Youtube,
   Phone,
   Mail,
@@ -792,12 +792,13 @@ function App() {
                   <MessageCircle size={20} />
                 </a>
                 <a
-                  href="https://twitter.com/KLSTechHQ"
+                  href="https://www.linkedin.com/company/kls-tech-solutions"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon w-10 h-10 border-2 border-black rounded-lg flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300"
+                  aria-label="LinkedIn"
                 >
-                  <Twitter size={20} />
+                  <Linkedin size={20} />
                 </a>
                 <a
                   href="https://youtube.com/@klstechsolutions"
